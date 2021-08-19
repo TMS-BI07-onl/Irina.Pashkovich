@@ -1,0 +1,19 @@
+Well done!
+
+1. 
+b) -0.5 
+There is no requirements in the task to rearrange query results. So order by is not needed. 
+c) 
+It's not a mistake, but don't overthink the task. We haven't talked about joins yet. :)
+
+4. 
+a) -1  
+Correct answer: ... WHERE LastName LIKE 'M%' OR NOT EmailPromotion LIKE '%1%'. 
+Second condition is not "equal", it's "including". For example, if after next data update there is a EmailPromotion 3451654, it should be added to the final result set.
+Once again, order by is not required.
+c) -0.5 
+Which query from two should I check?
+First one doesn't need name column in the select list. We' re looking for one weight and one size, not for each product.
+Second one is (once again) overthinking.
+
+Mark: 8.
