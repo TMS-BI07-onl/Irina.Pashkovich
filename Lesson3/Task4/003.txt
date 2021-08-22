@@ -1,0 +1,7 @@
+/* Вывести самого молодого и самого пожилого сотрудника [HumanResources].[Employee] */
+ 
+ SELECT
+	  MAX(DATEDIFF(yy, CONVERT(DATETIME, [BirthDate]), GETDATE())) AS Old,
+	  MIN(DATEDIFF(yy, CONVERT(DATETIME, [BirthDate]), GETDATE())) AS Young
+  FROM [AdventureWorks2017].[HumanResources].[Employee] 
+

@@ -1,0 +1,35 @@
+
+/*
+Вывести список организаций, 
+с которыми работали сотрудники ([Employee]) [SalariedFlag] которых равен 0, по заказам 2012 года
+со следующими полями:
+
+[CreditRating], [VendorName] название организации, 
+поле [AccountNumber] разделить на 2 поля, в 1 поле [AccountText] вывести все данные из поля [AccountNumber] до 0001, 2 поле [AccountNumber] значение [AccountNumber] после текстовой части
+поля [OrderDate] и [ShipDate]
+вывести поле [DifferenceDay] - количество дней между [OrderDate] и [ShipDate]
+поле [SubTotal] округлить до 2 знаков после запятой
+поле [TaxAmt] показать только целую часть
+поле [Freight]
+
+Сортировку выполнить по [CreditRating], кварталу  [OrderDate], названию организации,  месяцу [OrderDate]
+*/
+
+USE [AdventureWorks2017]
+SELECT 
+[CreditRating] = Vendor.CreditRating
+,[VendorName] = [Name]
+,[AccountText] = SUBSTRING([AccountNumber], 1, PATINDEX('%0%', [AccountNumber])-1)
+,[AccountNumber] = SUBSTRING([AccountNumber], PATINDEX('%0%', [AccountNumber]), LEN([AccountNumber]))
+,[OrderDate] ,[ShipDate]
+,[DifferenceDay] =  DATEDIFF(day, [OrderDate], [ShipDate])
+,[SubTotal] = ROUND ([SubTotal],2)
+,[TaxAmt] = FLOOR([TaxAmt])
+ ,[Freight]
+
+FROM [Purchasing].[PurchaseOrderHeader]  PurchaseOrderHeader
+JOIN [Purchasing].[Vendor] Vendor ON PurchaseOrderHeader.[VendorID] = Vendor.BusinessEntityID
+JOIN [HumanResources].[Employee] Employee ON PurchaseOrderHeader.EmployeeID = Employee.BusinessEntityID
+WHERE [SalariedFlag] = 0 AND YEAR([OrderDate]) = 2012
+
+ORDER BY [CreditRating], DATEPART(QUARTER, [OrderDate]), [Name], MONTH([OrderDate])

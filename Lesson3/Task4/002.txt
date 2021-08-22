@@ -1,0 +1,4 @@
+/* вывести предыдущий месяц в формате номер месяца - название месяца)*/
+
+SELECT CAST(DatePart(mm,DateAdd(m,-1,GetDate()))AS NVARCHAR(1)) + ' -  ' + DateName(mm,DateAdd(m,-1,GetDate()))
+

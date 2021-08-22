@@ -1,0 +1,34 @@
+/*Вывести данные по сотрудникам с сортировкой по FirstName:
+вывести новое поле FullName в формате FirstName LastName, LastName большими буквами
+поле [BirthDate] в формате дд.мм.гггг
+вывести новое поле Возраст сотрудника Age
+вывести новое поле Признак пенсионера Pension - Если возраст > 60 пишем в поле комментарий 'pensioner'
+вывести новое поле Domen из поля LoginId (значение до '/')
+вывести новое поле Login из поля LoginId (значение после '/')
+вывести поле [Gender] - Для M 'Male' для F 'Female'
+поле [OrganizationLevel] выбираем из списка 'First','Second','Third','Forth'
+поле [JobTitle] заменить -WC на _wc
+вывести поле [NationalIDNumber], добавив в начале значения 0000, а в конце столько 0, чтобы длина поля [NationalIDNumber] при выводе данных была 14 знаков
+вывести из [HumanResources].[EmployeePayHistory] поле [Rate] округлив его до целых
+*/
+
+USE [AdventureWorks2017]
+SELECT 
+[FullName] = [FirstName] + ' ' + UPPER([LastName])
+,[BirthDate] = CONVERT(nvarchar, [BirthDate], 104)
+,[Age] = DATEDIFF(yy, CONVERT(DATETIME, [BirthDate]), GETDATE())
+,[Pension] = IIF(DATEDIFF(yy, CONVERT(DATETIME, [BirthDate]), GETDATE()) > 60, 'pensioner', '' )
+,[Gender] = CASE [Gender] WHEN 'M' THEN 'Male' WHEN 'F' THEN 'Female'ELSE 'not Gender' END
+,[Domen] = LEFT([LoginID], CHARINDEX('\', [LoginID])-1)
+,[Login] = SUBSTRING([LoginID], LEN(LEFT([LoginID], CHARINDEX('\', [LoginID])+1)),LEN([LoginID]))
+,[OrganizationLevel] = CHOOSE([OrganizationLevel], 'First','Second','Third','Forth')
+,[JobTitle] = REPLACE([JobTitle], '- WC', '_wc')
+,[NationalIDNumber] = REPLICATE('0', 4) + [NationalIDNumber] + REPLICATE('0', 10 - LEN([NationalIDNumber]) ) 
+,[Rate] = ROUND([Rate],0)
+
+FROM [HumanResources].[Employee] Employee
+JOIN [Person].[Person] Person ON  Employee.BusinessEntityID = Person.BusinessEntityID
+JOIN [HumanResources].[EmployeePayHistory] EmployeePayHistory ON  Employee.BusinessEntityID = EmployeePayHistory.BusinessEntityID
+
+ORDER BY [FirstName]
+
