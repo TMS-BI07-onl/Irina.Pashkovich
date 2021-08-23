@@ -1,0 +1,26 @@
+Well done!
+
+2.
+a)
+Technically, while writing second and third condition for this task you could leave only <100 and <500, because all conditions is being checked in the written order. It's just for your information. :)
+
+3.
+b)-1
+Correct answer:
+SELECT 2*Цена AS Новая_цена
+FROM Фармпрепараты преп
+	JOIN Типы_фармпрепаратов тип ON тип.id=преп.id_типа
+WHERE Тип='А'
+Why did you put non-aggregated filter in the HAVING clause? We should WHERE for this reason. Group by is also not needed.
+
+c)-0.5
+The same mistake with the HAVING.
+
+d)
+The better choice for this task is DISTINCT, because obviously we don't have any aggregation there, it's just two text columns. When you want to make result rows unique, you should use DISTINCT.
+
+
+Also, general note about joining. 
+Your solutions with joining to select are correct, but they are not optimal. There is no reason to move filtration to the FROM clause. Of course, query perfomance can be changed from table to table and in some cases your solution could be better. But in general we decide to JOIN to the whole table and move filters to WHERE.
+
+Mark: 6+3
