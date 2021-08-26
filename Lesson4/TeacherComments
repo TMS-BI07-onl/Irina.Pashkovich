@@ -1,0 +1,14 @@
+Well done!
+
+4.
+a)
+There were actually no need to do it with one query. That's great that you can find multiple ways to do similar tasks. Good job! :)
+
+f)
+"for each SalesOrderID" was added to notify that you need to use PARTITION BY.
+
+g)
+Why do you need REPLACE function? As I see, you want to replace space by empty value, but how can you find space, if in ISNULL you have empty value?
+
+
+Mark: 10.
