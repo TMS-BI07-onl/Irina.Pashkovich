@@ -1,0 +1,12 @@
+Well done!
+
+7.
+Decimal is totally equal to numeric. Ans they store values with the fixed precision. Like money or temperature. You exactly know the number of symbols after the ','.
+Float is equel to real and it stores numbers that we know nothing about. It's the mosr general numeric data type.
+We don't have any requirement that emails should be unique. Of course, in real life two equal emails can't exist, but let's pretend that database designer forgot to add this rule in this task.
+If we add UNIQUE constraint, the row with equal email will not be added. You were right.
+
+12.
+In this task it was meant to add parameters not to replace the getdate, but to replace the bigger part of code, for example DATEDIFF(month, 0, @Date).
+
+Mark: 10.
