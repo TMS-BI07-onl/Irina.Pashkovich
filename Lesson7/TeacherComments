@@ -1,0 +1,9 @@
+Well done!
+
+A
+As a matter of fact, we don't really need PK in the fact tables. We can imagine that PK is the pair of two fk in the bridge table, 'cause this pair is unique.
+
+B 
+There is no need to split ФИО to 3 columns. 
+
+Mark: 10
