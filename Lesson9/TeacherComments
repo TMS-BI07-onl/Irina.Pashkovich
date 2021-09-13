@@ -1,0 +1,8 @@
+Well done!
+
+
+Swimmer.Coach:
+Why do you need to use parameters in the rand function?
+Putting NULL values to the Rank is useless. You are updating all values on the next values, why just delete rank column from the insert statement?
+
+Mark: 10
