@@ -1,0 +1,34 @@
+ USE [AdventureWorks2017]
+  /*Найдите людей и номера их телефонов, код города которых начинается на 4 и заканчивается на 5*/
+
+  SELECT CONCAT([LastName], ' ',[MiddleName], ' ', [FirstName]) as FIO, [PhoneNumber]
+  FROM [Person].[Person] Person
+  JOIN [Person].[PersonPhone] PersonPhone ON Person.[BusinessEntityID] = PersonPhone.[BusinessEntityID]
+  WHERE [PhoneNumber] LIKE ('4_5%')
+
+  /*отнести каждого человека из [HumanResources].[Employee] в свою возрастную категорию */
+
+  SELECT CONCAT([LastName], ' ',[MiddleName], ' ', [FirstName]) as FIO, [BirthDate], Age =  FLOOR(DATEDIFF(DAY, [BirthDate], DATEADD(month, 3, GETDATE())) / 365.25),
+  category = 
+  CASE WHEN FLOOR(DATEDIFF(DAY, [BirthDate], DATEADD(month, 3, GETDATE())) / 365.25) > 20 AND FLOOR(DATEDIFF(DAY, [BirthDate], DATEADD(month, 3, GETDATE())) / 365.25) < 59
+  THEN 'Adults'
+  WHEN FLOOR(DATEDIFF(DAY, [BirthDate], DATEADD(month, 3, GETDATE())) / 365.25) > 59 AND FLOOR(DATEDIFF(DAY, [BirthDate], DATEADD(month, 3, GETDATE())) / 365.25) < 75
+  THEN 'Elderly'
+  WHEN FLOOR(DATEDIFF(DAY, [BirthDate], DATEADD(month, 3, GETDATE())) / 365.25) > 75
+  THEN 'Sinele'
+  ELSE 'Adolescence' END
+  FROM [Person].[Person] Person
+  JOIN [HumanResources].[Employee] Employee ON Person.[BusinessEntityID] = Employee.[BusinessEntityID]
+  WHERE FLOOR(DATEDIFF(DAY, [BirthDate], DATEADD(month, 3, GETDATE())) / 365.25) BETWEEN 17 AND 90
+  ORDER BY [BirthDate]
+
+  /*вывести ссамй дорогой продукт для каждого цвета
+  [Production].[Product]*/
+
+  SELECT DISTINCT p1.[Name], p1.[Color], p1.[StandardCost]
+  FROM [Production].[Product] p1
+  WHERE [StandardCost] IN  (SELECT DISTINCT MAX([StandardCost]) FROM [Production].[Product] p WHERE p.Color = p1.Color GROUP BY Color)
+
+5. тема Вокзал
+
+
