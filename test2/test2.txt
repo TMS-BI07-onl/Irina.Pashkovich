@@ -63,3 +63,57 @@ __________________________
   FROM [Production].[Product] p1
   WHERE [StandardCost] IN  (SELECT MAX([StandardCost]) OVER (PARTITION BY  Color ORDER BY Color)  FROM [Production].[Product])
 
+_______________________________________
+Пробовала разные варианты
+USE [AdventureWorks2017]
+
+-- Через ранжирующую функцию
+SELECT [Name], [Color], [ListPrice]
+FROM (
+SELECT [Name], [Color], [ListPrice], RANK() OVER (Partition BY [Color] ORDER BY [ListPrice] DESC) AS MaxPrice
+FROM [Production].[Product]) MaxValue
+WHERE MaxPrice = 1
+
+-- Через оконную функцию
+SELECT [Name], [Color], [ListPrice]
+FROM (
+SELECT [Name], [Color], [ListPrice], MAX([ListPrice]) OVER (Partition BY [Color] ORDER BY [ListPrice] DESC) AS MaxPrice
+FROM [Production].[Product]) MaxValue
+WHERE [ListPrice] = MaxPrice
+
+
+-- Использую CTE
+;
+WITH CTE_Max_Price
+AS (
+SELECT [Color], MAX([ListPrice]) OVER (Partition BY [Color] ORDER BY [ListPrice] DESC) as NeedMax FROM [Production].[Product]
+)
+
+-- Через оконную функцию в CTE и использую EXISTS
+SELECT [Name], [Color], [ListPrice]
+FROM [Production].[Product]
+WHERE EXISTS (SELECT NeedMax FROM CTE_Max_Price cte WHERE [ListPrice] = NeedMax)
+
+-- Через оконную функцию в CTE
+
+SELECT p1.[Name], p1.[Color], NeedMax
+FROM [Production].[Product] p1
+JOIN CTE_Max_Price p2
+ON p1.[Color] = p2.[Color]
+GROUP BY p1.[Name], p1.[Color], NeedMax
+HAVING MAX([ListPrice]) = NeedMax
+
+
+-- попробовала и RowNumber
+SELECT p1.[Name], p1.[Color], p1.[ListPrice]
+FROM
+(
+SELECT TOP (1) WITH TIES [Name], [Color], [ListPrice]
+FROM [Production].[Product] 
+ORDER BY ROW_NUMBER() OVER(PARTITION BY [Color] ORDER BY [ListPrice] DESC)
+) p1
+LEFT JOIN [Production].[Product] p2
+ON p1.[Color] = p2.[Color] AND p1.[ListPrice] = p2.[ListPrice]
+
+
+
