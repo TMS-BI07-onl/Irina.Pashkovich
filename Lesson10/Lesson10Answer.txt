@@ -1,0 +1,14 @@
+/*Напишите скрипт для суммы OrderQty для каждого года и зимних месяцев из Production.WorkOrder в виде транспонированной матрицы*/
+ 
+
+USE [AdventureWorks2017]
+
+SELECT Years, [1] AS [January], [2] AS [February], [12] AS [December]
+FROM
+(SELECT YEAR([DueDate]) AS Years, MONTH([DueDate]) AS Months, SUM([OrderQty]) AS OrderQty 
+ FROM [Production].[WorkOrder]
+ GROUP BY [DueDate]) AS dannie
+PIVOT (SUM([OrderQty]) FOR Months IN ([1], [2], [12])
+) AS result
+ORDER BY Years
+;
