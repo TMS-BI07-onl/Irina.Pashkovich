@@ -1,0 +1,130 @@
+/*МЕДИЦИНСКАЯ ЛАБОРАТОРИЯ*/
+/*1. Определить количество отработанных часов (1 день = 8 часов) 
+ за текущий год каждым специалистом в разрезе месяцев.
+ Результат представить в виде транспонированной таблицы*/
+
+
+ --1. Создаю CTE, в котором выбираю специалистов
+;
+WITH CTE_WorkHour 
+AS
+(SELECT  [EmployeeID],
+	 [FIO] = CONCAT([LastName], ' ', [FirstName], ' ', [FatherName]),
+	 [WorkHour] = 8 * COUNT(ISNULL(Visit.DateVisit,0)),
+	 [Month] = MONTH(Visit.DateVisit)
+
+ FROM Employees Employees 
+ LEFT JOIN Visit Visit ON  Employees.ID = Visit.EmployeeID  
+ WHERE Visit.EmployeeID IS NULL OR YEAR(Visit.DateVisit) = YEAR(GETDATE())
+ GROUP BY [EmployeeID], [LastName], [FirstName], [FatherName], MONTH(Visit.DateVisit)
+ )
+
+SELECT 
+[FIO],
+[January]  = ISNULL([1],0),
+[February] = ISNULL([2],0),
+[March]    = ISNULL([3],0),
+[April]    = ISNULL([4],0),
+[May]      = ISNULL([5],0),
+[June]     = ISNULL([6],0),
+[July]     = ISNULL([7],0),
+[August]   = ISNULL([8],0),
+[September] = ISNULL([9],0),
+[October]  = ISNULL([10],0),
+[November] = ISNULL([11],0),
+[December] = ISNULL([12],0)
+
+FROM 
+(SELECT [FIO], [WorkHour], [Month]
+FROM CTE_WorkHour) as dannie
+PIVOT (SUM([WorkHour]) FOR [Month] IN([1], [2], [3],[4],[5],[6],[7],[8],[9],[10],[11],[12])) as result
+;
+
+ /*ПОЯСНЕНИЯ
+ В данном варианте я могу рассчитать отработанные часы по специалистам, ведущим приём  - тем специалистам,
+ у которых были приёмы либо не были приемы, но специалист их может вести, но не работал.
+ Такие специлисты, как администратор, директор или те, которые приём не видут, но работали
+ в расчёте получат 0. Хотя возможно они и работали, но 0, т.к. считаем от визитов, которые оказаны, а их у регистратора например в этой таблице не будет
+ 
+ Для выбора каждого специалиста, как стоит в условии, использую 
+ LEFT JOIN для того чтобы показало специалистов, у которых не было приёмов в этом году и в расчёте показало 0 отработанных часов
+ или приёмы, которые были в текущем году и в расчёте покажет колиество часов.
+
+ У разработчика БД есть таблица EmployeesSchedule, я посчитала ее как таблицу расписания. 
+ Расчёт в задаче не вела от учёта этой таблицы, т.к. расписание не предполагает отработанное время.
+ Если разработчик ведёт учёт рабочего времени специалистов  в этой таблице (поле WorkDate),
+ то CTE построю таким образом:
+
+ ;
+WITH CTE_WorkHour 
+AS
+(SELECT  [EmployeeID],
+	 [FIO] = CONCAT([LastName], ' ', [FirstName], ' ', [FatherName]),
+	 [WorkHour] = 8 * COUNT(EmployeesSchedule.WorkDate),
+	 [Month] = MONTH(EmployeesSchedule.WorkDate)
+
+ FROM Employees Employees 
+ LEFT JOIN EmployeesSchedule EmployeesSchedule ON  Employees.ID = Visit.EmployeeID  
+ WHERE EmployeesSchedule.EmployeeID IS NULL OR YEAR(EmployeesSchedule.WorkDate = YEAR(GETDATE())
+ GROUP BY [EmployeeID], [LastName], [FirstName], [FatherName], MONTH(EmployeesSchedule.WorkDate))
+ )
+ */
+_________________________________________________________________________________________________
+
+/*Проверить среднюю стоимость услуги в зависимости от порядка посещения (первое, второе)*/
+
+-- 1. CTE для установления порядка посещения
+;WITH CTE_OrderVisit
+AS
+(
+SELECT  [EmploeeyId] , [ClientId], [DateVisit], [Cost],
+[Rank] = RANK() OVER(PARTITION BY [EmploeeyId], [ClientId] ORDER BY [EmploeeyId], [DateVisit], [ClientId])
+FROM  Visit
+)
+
+,CTE_Rank_AvgRank -- CTE  номер посещения, средняя стоимость по номеру посещения
+AS
+(
+SELECT DISTINCT
+ [OrderVisit]  = OrderVisit.[Rank] 
+,[AvgOrderVisit] = AVG(Visit.[Cost]) OVER(PARTITION BY [Rank])
+
+FROM Visit Visit
+JOIN CTE_OrderVisit OrderVisit
+ON Visit.[EmploeeyId] = OrderVisit.[EmploeeyId] AND Visit.[ClientId] = OrderVisit.[ClientId] AND Visit.[DateVisit] = OrderVisit.[DateVisit]
+GROUP BY Visit.[EmploeeyId], Visit.[ClientId], Visit.[Cost], [Rank]
+)
+
+--сравнение
+SELECT [OrderVisit], [AvgOrderVisit], 
+[DifferencePreviousOrderVisitText] = LAG(AvgOrderVisit) OVER (ORDER BY OrderVisit) - AvgOrderVisit,
+[DifferencePreviousOrderVisitText] = 
+CASE WHEN (LAG(AvgOrderVisit) OVER (ORDER BY OrderVisit) - AvgOrderVisit) IS NULL THEN N'для этого номера посещения нет предыдущего номера посещения'
+WHEN LAG(AvgOrderVisit) OVER (ORDER BY OrderVisit) >  AvgOrderVisit THEN CONCAT(N'средняя стоимость услуги ',[OrderVisit], N'посещения превышает среднюю стоимость для ',  LAG(OrderVisit) OVER (ORDER BY OrderVisit), N'-го посещения')
+WHEN LAG(AvgOrderVisit) OVER (ORDER BY OrderVisit) < AvgOrderVisit THEN CONCAT(N'средняя стоимость услуги ',[OrderVisit], N'-го посещения меньше средней стоимости для ',  LAG(OrderVisit) OVER (ORDER BY OrderVisit) , N'-го посещения')
+ELSE CONCAT(N'стоимость услуги ',[OrderVisit], N'- го посещения равна средней стоимости для ', LAG(OrderVisit) OVER (ORDER BY OrderVisit), N'-го посещения')  
+END
+
+FROM CTE_Rank_AvgRank
+
+
+
+
+/*т.к. я не поняла сразу задание, то выводила сравнение стоимости услуги со средней стоимостью для этого вида посещениий*/
+
+/*SELECT Visit.[EmploeeyId], Visit.[ClientId]
+,[OrderVisit] =  OrderVisit.[Rank] 
+,Visit.[Cost]
+,[AvgOrderVisit] = AVG(Visit.[Cost]) OVER(PARTITION BY [Rank])
+,[Difference_Cost_AvgOrderVisitCost] = Visit.[Cost] - AVG(Visit.[Cost]) OVER(PARTITION BY [Rank]) 
+,[Comment] = CASE WHEN Visit.[Cost] > AVG(Visit.[Cost]) OVER(PARTITION BY [Rank]) THEN CONCAT(N'стоимость услуги превышает среднюю стоимость для ', [Rank], N'-го посещения')
+                  WHEN Visit.[Cost] < AVG(Visit.[Cost]) OVER(PARTITION BY [Rank]) THEN CONCAT(N'стоимость услуги меньше средней стоимости для ', [Rank], N'-го посещения')
+		   ELSE CONCAT(N'стоимость услуги равна средней стоимости для ', [Rank], N'-го посещения') 
+		   END
+
+FROM Visit Visit
+JOIN CTE_OrderVisit OrderVisit
+ON Visit.[EmploeeyId] = OrderVisit.[EmploeeyId] AND Visit.[ClientId] = OrderVisit.[ClientId] AND Visit.[DateVisit] = OrderVisit.[DateVisit]
+GROUP BY Visit.[EmploeeyId], Visit.[ClientId], Visit.[Cost], [Rank]
+ORDER BY OrderVisit.[Rank]
+*/
