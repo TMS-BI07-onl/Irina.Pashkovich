@@ -1,0 +1,14 @@
+Well done!
+
+Homework
+Your answer is correct, great job!
+Thanks for finding solution with cycle! It looks really great!
+
+Test
+1
+The basic idea was to use Schedule table.
+2
+Why do we need [EmploeeyId] and [ClientId] in RANK, if they will be the same inside the group and we are ordering only data inside the group?
+
+Mark: 10
+Test: 10
