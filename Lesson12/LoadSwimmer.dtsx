@@ -1,0 +1,725 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/21/2021 10:10:09 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-3VHCQ93"
+  DTS:CreatorName="DESKTOP-3VHCQ93\Sasha"
+  DTS:DTSID="{C7FBB3F2-40AA-47D2-9A5E-EEB9F7D6E9BF}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.121"
+  DTS:LocaleID="1049"
+  DTS:ObjectName="LoadSwimmer"
+  DTS:PackageType="5"
+  DTS:VersionBuild="16"
+  DTS:VersionGUID="{72C02B6A-FAD9-4771-8F9B-DBE90401610D}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.AdventureWorksDW2017]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{5044335C-8988-43F1-9989-F82970C265FA}"
+      DTS:ObjectName="DESKTOP-3VHCQ93\SQLEXPRESS.AdventureWorksDW2017">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=DESKTOP-3VHCQ93\SQLEXPRESS;Initial Catalog=AdventureWorksDW2017;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{D2397506-FDBF-4679-A3BD-12EEDA565D40}"
+      DTS:ObjectName="DESKTOP-3VHCQ93\SQLEXPRESS.Swimming">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=DESKTOP-3VHCQ93\SQLEXPRESS;Initial Catalog=Swimming;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="3"
+      DTS:DTSID="{F845073E-FF3E-40D5-AAC8-BA593B8D9786}"
+      DTS:ObjectName="People">
+      <DTS:Property
+        DTS:DataType="3"
+        DTS:Name="ParameterValue">10</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Задача потока данных"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Задача потока данных"
+      DTS:DTSID="{C3A67D8E-BB7D-4FE3-868F-76F26BE770F5}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Задача потока данных"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="Источник &quot;OLE DB&quot;;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;7"
+              description="Источник &quot;OLE DB&quot;"
+              name="Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Время ожидания команды, в секундах. Величина 0 означает неограниченное время ожидания."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowset">[dbo].[DimEmployee]</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает переменную, содержащую имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="Команда SQL для выполнения."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT [Number]
+      ,[FirstName]
+      ,[LastName]
+      ,[BirthDate]
+      ,[Gender] 
+      ,[Rank] = ABS(CHECKSUM(NewId())) % 7 + 1
+      ,[TrainerId] = FLOOR(RAND(CHECKSUM(NEWID()))*(1000-1)+1)
+FROM
+(SELECT  DISTINCT TOP (10)
+       [Number] = [EmployeeNationalIDAlternateKey]
+      ,[FirstName]
+      ,[LastName]
+      ,[BirthDate]
+      ,[Gender]
+FROM [AdventureWorksDW2017].[dbo].[DimEmployee]) people</property>
+                <property
+                  dataType="System.String"
+                  description="Переменная, содержащая команду SQL для выполнения."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает кодовую страницу столбца, используемую, когда недоступны сведения о кодовой странице из источника данных."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Вызывает безусловное использование значение свойства DefaultCodePage при описании символьных данных."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает используемый режим доступа к базе данных."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="Сопоставления между параметрами в команде SQL и переменными."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.AdventureWorksDW2017]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.AdventureWorksDW2017]"
+                  description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;]"
+                  name="Выход источника &quot;OLE DB&quot;">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[FirstName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[FirstName]"
+                      length="50"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[FirstName]"
+                      name="FirstName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[LastName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[LastName]"
+                      length="50"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[LastName]"
+                      name="LastName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[BirthDate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[BirthDate]"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[BirthDate]"
+                      name="BirthDate"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Gender]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[Gender]"
+                      length="1"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Gender]"
+                      name="Gender"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Rank]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[Rank]"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Rank]"
+                      name="Rank"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TrainerId]"
+                      dataType="r8"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[TrainerId]"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TrainerId]"
+                      name="TrainerId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Number]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[Number]"
+                      length="15"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Number]"
+                      name="Number"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[FirstName]"
+                      dataType="wstr"
+                      length="50"
+                      name="FirstName" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[LastName]"
+                      dataType="wstr"
+                      length="50"
+                      name="LastName" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[BirthDate]"
+                      dataType="dbDate"
+                      name="BirthDate" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[Gender]"
+                      dataType="wstr"
+                      length="1"
+                      name="Gender" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[Rank]"
+                      dataType="i4"
+                      name="Rank" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[TrainerId]"
+                      dataType="r8"
+                      name="TrainerId" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].ExternalColumns[Number]"
+                      dataType="wstr"
+                      length="15"
+                      name="Number" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;]"
+                  isErrorOut="true"
+                  name="Вывод ошибок источника &quot;OLE DB&quot;">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[Number]"
+                      dataType="wstr"
+                      length="15"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[Number]"
+                      name="Number" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[FirstName]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[FirstName]"
+                      name="FirstName" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[LastName]"
+                      dataType="wstr"
+                      length="50"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[LastName]"
+                      name="LastName" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[BirthDate]"
+                      dataType="dbDate"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[BirthDate]"
+                      name="BirthDate" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[Rank]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[Rank]"
+                      name="Rank" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[TrainerId]"
+                      dataType="r8"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[TrainerId]"
+                      name="TrainerId" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[Gender]"
+                      dataType="wstr"
+                      length="1"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Вывод ошибок источника &quot;OLE DB&quot;].Columns[Gender]"
+                      name="Gender" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Назначение &quot;OLE DB&quot;;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;4"
+              description="Назначение &quot;OLE DB&quot;"
+              name="Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Время ожидания команды, в секундах. Величина 0 означает неограниченное время ожидания."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowset">[Swimmer].[Swimmer]</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает переменную, содержащую имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="Команда SQL для выполнения."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает кодовую страницу столбца, используемую, когда недоступны сведения о кодовой странице из источника данных."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Вызывает безусловное использование значение свойства DefaultCodePage при описании символьных данных."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает используемый режим доступа к базе данных."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, должны ли значения в столбцах идентификаторов копироваться в назначение. Если свойство имеет значение false, значения в столбцах идентификаторов будут созданы автоматически в месте назначения. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, будут ли в назначение вставляться значения NULL для столбцов, содержащих их. Значение false показывает, что если столбец имеет значение NULL, то в назначение будет вставлено его значение по умолчанию. Применяется только в случае, если включена быстрая загрузка."
+                  name="FastLoadKeepNulls">true</property>
+                <property
+                  dataType="System.String"
+                  description="Задает параметры быстрой загрузки. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadOptions"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Задает, когда выдаются сообщения о фиксации транзакции в ходе вставки данных. Значение 0 задает, что по окончании вставки данных будет выдано одно сообщение о фиксации транзакции. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+                  description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;]"
+                  errorOrTruncationOperation="Вставить"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Вход назначения &quot;OLE DB&quot;">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[FirstName]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="FirstName"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[FirstName]"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[FirstName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[LastName]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="LastName"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[LastName]"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[LastName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[BirthDate]"
+                      cachedDataType="dbDate"
+                      cachedName="BirthDate"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[BirthDate]"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[BirthDate]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Gender]"
+                      cachedDataType="wstr"
+                      cachedLength="1"
+                      cachedName="Gender"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Gender]"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Gender]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Rank]"
+                      cachedDataType="i4"
+                      cachedName="Rank"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Rank]"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Rank]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[TrainerId]"
+                      cachedDataType="r8"
+                      cachedName="TrainerId"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[TrainerId]"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[TrainerId]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[Number]"
+                      cachedDataType="wstr"
+                      cachedLength="15"
+                      cachedName="Number"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[PassportNumber]"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Number]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[SwimmerId]"
+                      dataType="i4"
+                      name="SwimmerId" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[FirstName]"
+                      dataType="wstr"
+                      length="50"
+                      name="FirstName" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[LastName]"
+                      dataType="wstr"
+                      length="50"
+                      name="LastName" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[PassportNumber]"
+                      dataType="wstr"
+                      length="20"
+                      name="PassportNumber" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[BirthDate]"
+                      dataType="dbDate"
+                      name="BirthDate" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Gender]"
+                      dataType="wstr"
+                      length="10"
+                      name="Gender" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[Rank]"
+                      dataType="wstr"
+                      length="10"
+                      name="Rank" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[TrainerId]"
+                      dataType="i4"
+                      name="TrainerId" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Вывод ошибок назначения &quot;OLE DB&quot;"
+                  synchronousInputId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\Производный столбец PassportNumber"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Производный столбец;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;0"
+              description="Создает новые значения столбцов путем применения выражений к входным столбцам преобразования. Создает новые столбцы или перезаписывает существующие. Пример: объединение значений столбцов &quot;first name&quot; и &quot;last name&quot; и создание столбца &quot;full name&quot;."
+              name="Производный столбец PassportNumber"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Производный столбец PassportNumber.Inputs[Вход производного столбца]"
+                  description="Ввод преобразования &quot;Производный столбец&quot;"
+                  name="Вход производного столбца">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Производный столбец PassportNumber.Inputs[Вход производного столбца].Columns[LastName]"
+                      cachedDataType="wstr"
+                      cachedLength="50"
+                      cachedName="LastName"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[LastName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Производный столбец PassportNumber.Inputs[Вход производного столбца].Columns[Number]"
+                      cachedDataType="wstr"
+                      cachedLength="15"
+                      cachedName="Number"
+                      errorOrTruncationOperation="Вычисление"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;].Columns[Number]"
+                      truncationRowDisposition="FailComponent"
+                      usageType="readWrite">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Выражение производного столбца"
+                          name="Expression">[LEFT](#{Package\Задача потока данных\Источник "OLE DB AdventureWorksDW2017_dbo_DimEmployee ".Outputs[Выход источника "OLE DB"].Columns[LastName]},2) + #{Package\Задача потока данных\Источник "OLE DB AdventureWorksDW2017_dbo_DimEmployee ".Outputs[Выход источника "OLE DB"].Columns[Number]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Понятное выражение производного столбца"
+                          expressionType="Notify"
+                          name="FriendlyExpression">LEFT(LastName,2) + Number</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Производный столбец PassportNumber.Outputs[Выход производного столбца]"
+                  description="Выход по умолчанию преобразования &quot;Производный столбец&quot;"
+                  exclusionGroup="1"
+                  name="Выход производного столбца"
+                  synchronousInputId="Package\Задача потока данных\Производный столбец PassportNumber.Inputs[Вход производного столбца]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Задача потока данных\Производный столбец PassportNumber.Outputs[Вывод ошибок производного столбца]"
+                  description="Вывод ошибок преобразования &quot;Производный столбец&quot;"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Вывод ошибок производного столбца"
+                  synchronousInputId="Package\Задача потока данных\Производный столбец PassportNumber.Inputs[Вход производного столбца]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Производный столбец PassportNumber.Outputs[Вывод ошибок производного столбца].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Производный столбец PassportNumber.Outputs[Вывод ошибок производного столбца].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Производный столбец PassportNumber.Outputs[Вывод ошибок производного столбца].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Производный столбец PassportNumber.Outputs[Вывод ошибок производного столбца].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Задача потока данных.Paths[Выход источника &quot;OLE DB&quot;]"
+              endId="Package\Задача потока данных\Производный столбец PassportNumber.Inputs[Вход производного столбца]"
+              name="Выход источника &quot;OLE DB&quot;"
+              startId="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;.Outputs[Выход источника &quot;OLE DB&quot;]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Выход производного столбца]"
+              endId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;.Inputs[Вход назначения &quot;OLE DB&quot;]"
+              name="Выход производного столбца"
+              startId="Package\Задача потока данных\Производный столбец PassportNumber.Outputs[Выход производного столбца]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="196,42"
+          Id="Package\Задача потока данных"
+          TopLeft="27,41" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Задача потока данных">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="350,42"
+          Id="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;"
+          TopLeft="29,269" />
+        <NodeLayout
+          Size="407,42"
+          Id="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;"
+          TopLeft="29,40" />
+        <NodeLayout
+          Size="279,42"
+          Id="Package\Задача потока данных\Производный столбец PassportNumber"
+          TopLeft="36,149" />
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Выход источника &quot;OLE DB&quot;]"
+          TopLeft="232.5,82">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-57,67"
+              Start="0,0"
+              End="-57,59.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,29.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,29.5"
+                    Point2="0,33.5"
+                    Point3="-4,33.5" />
+                  <mssgle:LineSegment
+                    End="-53,33.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-53,33.5"
+                    Point2="-57,33.5"
+                    Point3="-57,37.5" />
+                  <mssgle:LineSegment
+                    End="-57,59.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Выход производного столбца]"
+          TopLeft="175.5,191">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="28.5,78"
+              Start="0,0"
+              End="28.5,70.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,35" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,35"
+                    Point2="0,39"
+                    Point3="4,39" />
+                  <mssgle:LineSegment
+                    End="24.5,39" />
+                  <mssgle:CubicBezierSegment
+                    Point1="24.5,39"
+                    Point2="28.5,39"
+                    Point3="28.5,43" />
+                  <mssgle:LineSegment
+                    End="28.5,70.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Swimmer&quot;">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Задача потока данных\Источник &quot;OLE DB AdventureWorksDW2017_dbo_DimEmployee &quot;">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
