@@ -1,0 +1,44 @@
+/*1. Написать запрос на добавление в таблицу нового производителя*/
+Предполагаю, что id как РК identity, поэтому в запрос не вставляю, он добавится автоматически и будет 5
+
+INSERT INTO manufacturer (name, country_id)
+VALUES(N’HP’, 4)
+
+2. Написать запрос благодаря которому возраст Андрея в таблице user уменьшится в три раза
+SELECT name,  newAge  = age / 3 
+FROM user
+WHERE name = ‘Андрей’
+
+В этом запросе для всех Андреев возраст уменьшится. Если нужен конкретный Андрей, ткоторый один в базе, то  WHERE id = 4
+
+3. Найдите название продукта с максимальной ценой
+SELECT name
+FROM product
+WHERE price = (SELECT MAX(price) FROM product)
+
+4. Написать запрос на выборку всех пользователей с телефонами, которые начинабтся на 3 и заканчиваются на 4 либо с возрастом > 25
+SELECT user = user.name, phoneNumber = phone.name, age
+FROM user user
+FULL JOIN phone phone ON user.id = phone.user_id
+WHERE age > 25 OR phone.name LIKE ‘+3%4’
+
+
+5. Найти TOP 5 пользователей, кто купил больше всего продуктов
+Вариант 1 Через ранжирующую функцию
+SELECT user.name
+FROM (
+SELECT user.name, row_number() over (order by COUNT(product_id) desc) as row
+FROM user user 
+JOIN order order ON user.id = order.user_id
+JOIN product product order.product_id  = product.id
+)
+WHERE  row BETWEEN 1 AND 5
+
+
+Вариант 2
+SELECT TOP 5 user.name, COUNT(product_id) as purchase
+FROM user user 
+JOIN order order ON user.id = order.user_id
+JOIN product product order.product_id  = product.id
+GROUP BY user.name
+ORDER BY COUNT(product_id) DESC
