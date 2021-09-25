@@ -1,0 +1,2815 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/24/2021 9:31:58 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="DESKTOP-3VHCQ93"
+  DTS:CreatorName="DESKTOP-3VHCQ93\Sasha"
+  DTS:DTSID="{051DD30C-99E0-4AF9-9A4E-4F1A8A9454C2}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.121"
+  DTS:LocaleID="1049"
+  DTS:ObjectName="LoadResults"
+  DTS:PackageType="5"
+  DTS:VersionBuild="67"
+  DTS:VersionGUID="{32196BB0-8A05-4B8E-A4DC-E933C0EB7259}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{F93B8F3C-99A2-4CE6-90AE-9F2E7768BB20}"
+      DTS:ObjectName="DESKTOP-3VHCQ93\SQLEXPRESS.Swimming">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=DESKTOP-3VHCQ93\SQLEXPRESS;Initial Catalog=Swimming;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming 1]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{9564F1E6-1980-4CD2-938F-72A0787179D0}"
+      DTS:ObjectName="DESKTOP-3VHCQ93\SQLEXPRESS.Swimming 1">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Data Source=DESKTOP-3VHCQ93\SQLEXPRESS;Initial Catalog=Swimming;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Excel Connection Manager]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{ED3D0A54-D83D-4F7D-807E-1F17C70BDB6B}"
+      DTS:ObjectName="Excel Connection Manager">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectionString="Provider=Microsoft.Jet.OLEDB.4.0;Data Source=D:\BI\SSIS Results.xls;Extended Properties=&quot;EXCEL 8.0;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Задача потока данных"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Задача потока данных"
+      DTS:DTSID="{1ace99a4-c6a6-46e0-bf1c-030b2c2c177f}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Задача потока данных"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Задача потока данных\Competition"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Уточняющий запрос;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;6"
+              description="Присоединяет дополнительные столбцы к потоку данных путем поиска значений в таблице. Пример: соединение со столбцом &quot;employee id&quot; таблицы employees позволяет получить значения &quot;hire date&quot; и &quot;employee name&quot;. Рекомендуется воспользоваться этим преобразованием, если таблица подстановки не помещается в памяти."
+              name="Competition"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Задает инструкцию SQL, которая формирует таблицу уточняющих запросов."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT [CompetitionId]
+      ,[CompetitionName]
+      ,[DateStart] = CONVERT(NVARCHAR(10), [DateStart],104)
+      ,[DateEnd] = CONVERT(NVARCHAR(10), [DateEnd],104)
+  FROM [Swimming].[Competition].[Competition]</property>
+                <property
+                  dataType="System.String"
+                  description="Задает инструкцию SQL, которая использует параметры для формирования таблицы уточняющих запросов."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from (SELECT [CompetitionId]
+      ,[CompetitionName]
+      ,[DateStart] = CONVERT(NVARCHAR(10), [DateStart],104)
+      ,[DateEnd] = CONVERT(NVARCHAR(10), [DateEnd],104)
+  FROM [Swimming].[Competition].[Competition]) [refTable]
+where [refTable].[CompetitionName] = ? and [refTable].[DateStart] = ? and [refTable].[DateEnd] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает тип соединения, используемого для доступа к эталонному набору данных."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает тип кэша таблицы уточняющих запросов."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает, как преобразование &quot;Уточняющий запрос&quot; обрабатывает строки без совпадающих элементов в эталонном наборе данных."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает долю кэша (в процентах), выделенную для строк без совпадающих элементов в эталонном наборе данных."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Максимальный объем памяти для кэша ссылок на 32-разрядной платформе."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Максимальный объем памяти для кэша ссылок на 64-разрядной платформе."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает, следует ли ссылаться на метаданные в формате XML."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="CompetitionId" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="CompetitionName" dataType="DT_WSTR" length="100" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DateStart" dataType="DT_WSTR" length="10" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DateEnd" dataType="DT_WSTR" length="10" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Задает список идентификаторов журнала обращений и преобразований, сопоставляемый с параметрами, которые использует инструкция SQL в свойстве SQLCommand. Элементы списка разделяются точками с запятой."
+                  name="ParameterMap">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[CompetitionName]};#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[DateStart]};#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[DateEnd]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает кодовую страницу столбца, используемую, когда недоступны сведения о кодовой странице из источника данных."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Определяет, должны ли повторяющиеся ключи в ссылочных данных обрабатываться как ошибки при использовании режима полного кэширования."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных\Competition.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+                  description="Диспетчер соединений, используемый для доступа к данным уточняющих запросов."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Competition.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]"
+                  name="Ввод преобразования &quot;Уточняющий запрос&quot;">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Competition.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;].Columns[CompetitionName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="CompetitionName"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[CompetitionName]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Указывает в ссылочной таблице столбец, который соединен с данным столбцом."
+                          name="JoinToReferenceColumn">CompetitionName</property>
+                        <property
+                          dataType="System.Null"
+                          description="Указывает в ссылочной таблице столбец, из которого копируется данный столбец."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Competition.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;].Columns[DateStart]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateStart"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateStart]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Указывает в ссылочной таблице столбец, который соединен с данным столбцом."
+                          name="JoinToReferenceColumn">DateStart</property>
+                        <property
+                          dataType="System.Null"
+                          description="Указывает в ссылочной таблице столбец, из которого копируется данный столбец."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Competition.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;].Columns[DateEnd]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateEnd"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateEnd]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Указывает в ссылочной таблице столбец, который соединен с данным столбцом."
+                          name="JoinToReferenceColumn">DateEnd</property>
+                        <property
+                          dataType="System.Null"
+                          description="Указывает в ссылочной таблице столбец, из которого копируется данный столбец."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Competition.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;]"
+                  errorOrTruncationOperation="Уточняющий запрос"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Вывод совпадений преобразования &quot;Уточняющий запрос&quot;"
+                  synchronousInputId="Package\Задача потока данных\Competition.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Competition.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;].Columns[CompetitionId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Копировать столбец"
+                      lineageId="Package\Задача потока данных\Competition.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;].Columns[CompetitionId]"
+                      name="CompetitionId"
+                      truncationRowDisposition="IgnoreFailure">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Указывает в ссылочной таблице столбец, из которого копируется данный столбец."
+                          name="CopyFromReferenceColumn">CompetitionId</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Задача потока данных\Competition.Outputs[Выход несовпадающих строк уточняющего запроса]"
+                  description="Вывод преобразования &quot;Уточняющий запрос&quot;, которое обрабатывает строки без совпадающих элементов в эталонном наборе данных. Используйте этот выход, если свойство NoMatchBehavior имеет значение &quot;Отправить строки без совпадающих элементов в выход несовпадающих строк&quot;."
+                  exclusionGroup="1"
+                  name="Выход несовпадающих строк уточняющего запроса"
+                  synchronousInputId="Package\Задача потока данных\Competition.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Задача потока данных\Competition.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Вывод ошибок преобразования &quot;Уточняющий запрос&quot;"
+                  synchronousInputId="Package\Задача потока данных\Competition.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Competition.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Competition.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Competition.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Competition.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\SSIS FK for Swimmer"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Источник &quot;Excel&quot;;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;1"
+              description="Источник &quot;Excel&quot;"
+              name="SSIS FK for Swimmer"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Время ожидания команды, в секундах. Величина 0 означает неограниченное время ожидания."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowset">Лист1$</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает переменную, содержащую имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="Команда SQL для выполнения."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="Переменная, содержащая команду SQL для выполнения."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает используемый режим доступа к базе данных."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="Сопоставление между параметрами в команде SQL и переменными."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных\SSIS FK for Swimmer.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Excel Connection Manager]"
+                  connectionManagerRefId="Package.ConnectionManagers[Excel Connection Manager]"
+                  description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;]"
+                  name="Выход источника &quot;Excel&quot;">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[SwimmerPassportNumber]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[SwimmerPassportNumber]"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[SwimmerPassportNumber]"
+                      name="SwimmerPassportNumber"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[TypeSwimmingName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[TypeSwimmingName]"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[TypeSwimmingName]"
+                      name="TypeSwimmingName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[CompetitionName]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[CompetitionName]"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[CompetitionName]"
+                      name="CompetitionName"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateStart]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[DateStart]"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateStart]"
+                      name="DateStart"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateEnd]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[DateEnd]"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateEnd]"
+                      name="DateEnd"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[ResultTime]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Преобразование"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[ResultTime]"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[ResultTime]"
+                      name="ResultTime"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[SwimmerPassportNumber]"
+                      dataType="wstr"
+                      length="255"
+                      name="SwimmerPassportNumber" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[TypeSwimmingName]"
+                      dataType="wstr"
+                      length="255"
+                      name="TypeSwimmingName" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[CompetitionName]"
+                      dataType="wstr"
+                      length="255"
+                      name="CompetitionName" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[DateStart]"
+                      dataType="wstr"
+                      length="255"
+                      name="DateStart" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[DateEnd]"
+                      dataType="wstr"
+                      length="255"
+                      name="DateEnd" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].ExternalColumns[ResultTime]"
+                      dataType="wstr"
+                      length="255"
+                      name="ResultTime" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;]"
+                  isErrorOut="true"
+                  name="Вывод ошибок источника &quot;Excel&quot;">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[SwimmerPassportNumber]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[SwimmerPassportNumber]"
+                      name="SwimmerPassportNumber" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[TypeSwimmingName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[TypeSwimmingName]"
+                      name="TypeSwimmingName" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[CompetitionName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[CompetitionName]"
+                      name="CompetitionName" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[DateStart]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[DateStart]"
+                      name="DateStart" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[DateEnd]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[DateEnd]"
+                      name="DateEnd" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[ResultTime]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[ResultTime]"
+                      name="ResultTime" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Вывод ошибок источника &quot;Excel&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\Swimmer"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Уточняющий запрос;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;6"
+              description="Присоединяет дополнительные столбцы к потоку данных путем поиска значений в таблице. Пример: соединение со столбцом &quot;employee id&quot; таблицы employees позволяет получить значения &quot;hire date&quot; и &quot;employee name&quot;. Рекомендуется воспользоваться этим преобразованием, если таблица подстановки не помещается в памяти."
+              name="Swimmer"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Задает инструкцию SQL, которая формирует таблицу уточняющих запросов."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from [Swimmer].[Swimmer]</property>
+                <property
+                  dataType="System.String"
+                  description="Задает инструкцию SQL, которая использует параметры для формирования таблицы уточняющих запросов."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from (select * from [Swimmer].[Swimmer]) [refTable]
+where [refTable].[PassportNumber] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает тип соединения, используемого для доступа к эталонному набору данных."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает тип кэша таблицы уточняющих запросов."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает, как преобразование &quot;Уточняющий запрос&quot; обрабатывает строки без совпадающих элементов в эталонном наборе данных."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает долю кэша (в процентах), выделенную для строк без совпадающих элементов в эталонном наборе данных."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Максимальный объем памяти для кэша ссылок на 32-разрядной платформе."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Максимальный объем памяти для кэша ссылок на 64-разрядной платформе."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает, следует ли ссылаться на метаданные в формате XML."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="SwimmerId" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FirstName" dataType="DT_WSTR" length="50" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="LastName" dataType="DT_WSTR" length="50" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="PassportNumber" dataType="DT_WSTR" length="20" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="BirthDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Gender" dataType="DT_WSTR" length="10" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Rank" dataType="DT_WSTR" length="10" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="TrainerId" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Задает список идентификаторов журнала обращений и преобразований, сопоставляемый с параметрами, которые использует инструкция SQL в свойстве SQLCommand. Элементы списка разделяются точками с запятой."
+                  name="ParameterMap">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[SwimmerPassportNumber]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает кодовую страницу столбца, используемую, когда недоступны сведения о кодовой странице из источника данных."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Определяет, должны ли повторяющиеся ключи в ссылочных данных обрабатываться как ошибки при использовании режима полного кэширования."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных\Swimmer.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+                  description="Диспетчер соединений, используемый для доступа к данным уточняющих запросов."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Swimmer.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]"
+                  name="Ввод преобразования &quot;Уточняющий запрос&quot;">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Swimmer.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;].Columns[SwimmerPassportNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SwimmerPassportNumber"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[SwimmerPassportNumber]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Указывает в ссылочной таблице столбец, который соединен с данным столбцом."
+                          name="JoinToReferenceColumn">PassportNumber</property>
+                        <property
+                          dataType="System.Null"
+                          description="Указывает в ссылочной таблице столбец, из которого копируется данный столбец."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Swimmer.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;]"
+                  errorOrTruncationOperation="Уточняющий запрос"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Вывод совпадений преобразования &quot;Уточняющий запрос&quot;"
+                  synchronousInputId="Package\Задача потока данных\Swimmer.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Swimmer.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;].Columns[SwimmerId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Копировать столбец"
+                      lineageId="Package\Задача потока данных\Swimmer.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;].Columns[SwimmerId]"
+                      name="SwimmerId"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Указывает в ссылочной таблице столбец, из которого копируется данный столбец."
+                          name="CopyFromReferenceColumn">SwimmerId</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Задача потока данных\Swimmer.Outputs[Выход несовпадающих строк уточняющего запроса]"
+                  description="Вывод преобразования &quot;Уточняющий запрос&quot;, которое обрабатывает строки без совпадающих элементов в эталонном наборе данных. Используйте этот выход, если свойство NoMatchBehavior имеет значение &quot;Отправить строки без совпадающих элементов в выход несовпадающих строк&quot;."
+                  exclusionGroup="1"
+                  name="Выход несовпадающих строк уточняющего запроса"
+                  synchronousInputId="Package\Задача потока данных\Swimmer.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Задача потока данных\Swimmer.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Вывод ошибок преобразования &quot;Уточняющий запрос&quot;"
+                  synchronousInputId="Package\Задача потока данных\Swimmer.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Swimmer.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Swimmer.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Swimmer.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Swimmer.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\TypeSwimming"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Уточняющий запрос;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;6"
+              description="Присоединяет дополнительные столбцы к потоку данных путем поиска значений в таблице. Пример: соединение со столбцом &quot;employee id&quot; таблицы employees позволяет получить значения &quot;hire date&quot; и &quot;employee name&quot;. Рекомендуется воспользоваться этим преобразованием, если таблица подстановки не помещается в памяти."
+              name="TypeSwimming"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Задает инструкцию SQL, которая формирует таблицу уточняющих запросов."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from [dbo].[TypeSwimming]</property>
+                <property
+                  dataType="System.String"
+                  description="Задает инструкцию SQL, которая использует параметры для формирования таблицы уточняющих запросов."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">select * from (select * from [dbo].[TypeSwimming]) [refTable]
+where [refTable].[Name] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает тип соединения, используемого для доступа к эталонному набору данных."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает тип кэша таблицы уточняющих запросов."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает, как преобразование &quot;Уточняющий запрос&quot; обрабатывает строки без совпадающих элементов в эталонном наборе данных."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает долю кэша (в процентах), выделенную для строк без совпадающих элементов в эталонном наборе данных."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Максимальный объем памяти для кэша ссылок на 32-разрядной платформе."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Максимальный объем памяти для кэша ссылок на 64-разрядной платформе."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает, следует ли ссылаться на метаданные в формате XML."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="TypeSwimmingId" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Name" dataType="DT_WSTR" length="50" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Задает список идентификаторов журнала обращений и преобразований, сопоставляемый с параметрами, которые использует инструкция SQL в свойстве SQLCommand. Элементы списка разделяются точками с запятой."
+                  name="ParameterMap">#{Package\Задача потока данных\342:invalid};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает кодовую страницу столбца, используемую, когда недоступны сведения о кодовой странице из источника данных."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Определяет, должны ли повторяющиеся ключи в ссылочных данных обрабатываться как ошибки при использовании режима полного кэширования."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных\TypeSwimming.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+                  description="Диспетчер соединений, используемый для доступа к данным уточняющих запросов."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\TypeSwimming.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]"
+                  name="Ввод преобразования &quot;Уточняющий запрос&quot;">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\TypeSwimming.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;].Columns[TypeSwimmingName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TypeSwimmingName"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[TypeSwimmingName]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Указывает в ссылочной таблице столбец, который соединен с данным столбцом."
+                          name="JoinToReferenceColumn">Name</property>
+                        <property
+                          dataType="System.Null"
+                          description="Указывает в ссылочной таблице столбец, из которого копируется данный столбец."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\TypeSwimming.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;]"
+                  errorOrTruncationOperation="Уточняющий запрос"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Вывод совпадений преобразования &quot;Уточняющий запрос&quot;"
+                  synchronousInputId="Package\Задача потока данных\TypeSwimming.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\TypeSwimming.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;].Columns[TypeSwimmingId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Копировать столбец"
+                      lineageId="Package\Задача потока данных\TypeSwimming.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;].Columns[TypeSwimmingId]"
+                      name="TypeSwimmingId"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Указывает в ссылочной таблице столбец, из которого копируется данный столбец."
+                          name="CopyFromReferenceColumn">TypeSwimmingId</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Задача потока данных\TypeSwimming.Outputs[Выход несовпадающих строк уточняющего запроса]"
+                  description="Вывод преобразования &quot;Уточняющий запрос&quot;, которое обрабатывает строки без совпадающих элементов в эталонном наборе данных. Используйте этот выход, если свойство NoMatchBehavior имеет значение &quot;Отправить строки без совпадающих элементов в выход несовпадающих строк&quot;."
+                  exclusionGroup="1"
+                  name="Выход несовпадающих строк уточняющего запроса"
+                  synchronousInputId="Package\Задача потока данных\TypeSwimming.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Задача потока данных\TypeSwimming.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Вывод ошибок преобразования &quot;Уточняющий запрос&quot;"
+                  synchronousInputId="Package\Задача потока данных\TypeSwimming.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\TypeSwimming.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\TypeSwimming.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\TypeSwimming.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\TypeSwimming.Outputs[Вывод ошибок преобразования &quot;Уточняющий запрос&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Назначение &quot;OLE DB&quot;;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;4"
+              description="Назначение &quot;OLE DB&quot;"
+              name="Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Время ожидания команды, в секундах. Величина 0 означает неограниченное время ожидания."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowset">[Swimmer].[Results]</property>
+                <property
+                  dataType="System.String"
+                  description="Указывает переменную, содержащую имя объекта базы данных, используемого для открытия набора строк."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="Команда SQL для выполнения."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает кодовую страницу столбца, используемую, когда недоступны сведения о кодовой странице из источника данных."
+                  name="DefaultCodePage">1251</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Вызывает безусловное использование значение свойства DefaultCodePage при описании символьных данных."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает используемый режим доступа к базе данных."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, должны ли значения в столбцах идентификаторов копироваться в назначение. Если свойство имеет значение false, значения в столбцах идентификаторов будут созданы автоматически в месте назначения. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, будут ли в назначение вставляться значения NULL для столбцов, содержащих их. Значение false показывает, что если столбец имеет значение NULL, то в назначение будет вставлено его значение по умолчанию. Применяется только в случае, если включена быстрая загрузка."
+                  name="FastLoadKeepNulls">true</property>
+                <property
+                  dataType="System.String"
+                  description="Задает параметры быстрой загрузки. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadOptions"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Задает, когда выдаются сообщения о фиксации транзакции в ходе вставки данных. Значение 0 задает, что по окончании вставки данных будет выдано одно сообщение о фиксации транзакции. Применяется только в том случае, если включена быстрая загрузка."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+                  connectionManagerRefId="Package.ConnectionManagers[DESKTOP-3VHCQ93\SQLEXPRESS.Swimming]"
+                  description="Соединение OLE DB среды выполнения, используемое для доступа к базе данных."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;]"
+                  errorOrTruncationOperation="Вставить"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Вход назначения &quot;OLE DB&quot;">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[ResultTime]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ResultTime"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[ResultTime]"
+                      lineageId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[ResultTime]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[SwimmerId]"
+                      cachedDataType="i4"
+                      cachedName="SwimmerId"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[SwimmerId]"
+                      lineageId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[SwimmerId]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[CompetitionId]"
+                      cachedDataType="i4"
+                      cachedName="CompetitionId"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[CompetitionId]"
+                      lineageId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[CompetitionId]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].Columns[TypeSwimmingId]"
+                      cachedDataType="i4"
+                      cachedName="TypeSwimmingId"
+                      externalMetadataColumnId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[TypeSwimmingId]"
+                      lineageId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[TypeSwimmingId]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[SwimmerId]"
+                      dataType="i4"
+                      name="SwimmerId" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[CompetitionId]"
+                      dataType="i4"
+                      name="CompetitionId" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[TypeSwimmingId]"
+                      dataType="i4"
+                      name="TypeSwimmingId" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[ResultTime]"
+                      dataType="dbTime2"
+                      name="ResultTime"
+                      scale="7" />
+                    <externalMetadataColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;].ExternalColumns[ResultsId]"
+                      dataType="i4"
+                      name="ResultsId" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Вывод ошибок назначения &quot;OLE DB&quot;"
+                  synchronousInputId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Outputs[Вывод ошибок назначения &quot;OLE DB&quot;].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\Распределение данных"
+              componentClassID="Microsoft.Multicast"
+              contactInfo="Многоадресная рассылка;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;0"
+              description="Распределяет все входные строки между всеми строками в одном или нескольких выходах. Пример: разбиение потока данных на ветви, чтобы создать копию данных, в которой некоторые значения перед передачей внешним партнерам будут скрыты."
+              name="Распределение данных">
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Распределение данных.Inputs[Многоадресная рассылка Вход 1]"
+                  name="Многоадресная рассылка Вход 1">
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Распределение данных.Outputs[Многоадресная рассылка Выход 1]"
+                  deleteOutputOnPathDetached="true"
+                  name="Многоадресная рассылка Выход 1"
+                  synchronousInputId="Package\Задача потока данных\Распределение данных.Inputs[Многоадресная рассылка Вход 1]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Задача потока данных\Распределение данных.Outputs[Выход многоадресной рассылки 1]"
+                  deleteOutputOnPathDetached="true"
+                  name="Выход многоадресной рассылки 1"
+                  synchronousInputId="Package\Задача потока данных\Распределение данных.Inputs[Многоадресная рассылка Вход 1]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Задача потока данных\Распределение данных.Outputs[Выход многоадресной рассылки 2]"
+                  deleteOutputOnPathDetached="true"
+                  name="Выход многоадресной рассылки 2"
+                  synchronousInputId="Package\Задача потока данных\Распределение данных.Inputs[Многоадресная рассылка Вход 1]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Задача потока данных\Распределение данных.Outputs[Выход многоадресной рассылки 3]"
+                  dangling="true"
+                  deleteOutputOnPathDetached="true"
+                  name="Выход многоадресной рассылки 3"
+                  synchronousInputId="Package\Задача потока данных\Распределение данных.Inputs[Многоадресная рассылка Вход 1]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\Соединение c CompetitionId"
+              componentClassID="Microsoft.MergeJoin"
+              contactInfo="Соединение слиянием;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;1"
+              description="Объедините два отсортированных потока данных в один с помощью соединения FULL, LEFT или INNER. Это преобразование рекомендуется использовать в случаях, когда потоки данных могут быть отсортированы по источникам."
+              name="Соединение c CompetitionId"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает тип выполняемого соединения."
+                  name="JoinType"
+                  typeConverter="JoinType">2</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает количество столбцов в ключе упорядочивания."
+                  name="NumKeyColumns">6</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, считаются ли значения NULL эквивалентными значениями."
+                  name="TreatNullsAsEqual">true</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает запрошенное максимальное число буферов на вход перед блокированием."
+                  name="MaxBuffersPerInput">5</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием]"
+                  hasSideEffects="true"
+                  name="Левый вход соединения слиянием">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[SwimmerPassportNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SwimmerPassportNumber"
+                      cachedSortKeyPosition="1"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[SwimmerPassportNumber]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[TypeSwimmingName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TypeSwimmingName"
+                      cachedSortKeyPosition="2"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[TypeSwimmingName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[CompetitionName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="CompetitionName"
+                      cachedSortKeyPosition="3"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[CompetitionName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[DateStart]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateStart"
+                      cachedSortKeyPosition="4"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[DateStart]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[DateEnd]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateEnd"
+                      cachedSortKeyPosition="5"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[DateEnd]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[ResultTime]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ResultTime"
+                      cachedSortKeyPosition="6"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[ResultTime]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[SwimmerId]"
+                      cachedDataType="i4"
+                      cachedName="SwimmerId"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[SwimmerId]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[TypeSwimmingId]"
+                      cachedDataType="i4"
+                      cachedName="TypeSwimmingId"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[TypeSwimmingId]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+                <input
+                  refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Правый вход соединения слиянием]"
+                  hasSideEffects="true"
+                  name="Правый вход соединения слиянием">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Правый вход соединения слиянием].Columns[SwimmerPassportNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SwimmerPassportNumber"
+                      cachedSortKeyPosition="1"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[SwimmerPassportNumber]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Правый вход соединения слиянием].Columns[TypeSwimmingName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TypeSwimmingName"
+                      cachedSortKeyPosition="2"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[TypeSwimmingName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Правый вход соединения слиянием].Columns[CompetitionName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="CompetitionName"
+                      cachedSortKeyPosition="3"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[CompetitionName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Правый вход соединения слиянием].Columns[DateStart]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateStart"
+                      cachedSortKeyPosition="4"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[DateStart]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Правый вход соединения слиянием].Columns[DateEnd]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateEnd"
+                      cachedSortKeyPosition="5"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[DateEnd]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Правый вход соединения слиянием].Columns[ResultTime]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ResultTime"
+                      cachedSortKeyPosition="6"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[ResultTime]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Правый вход соединения слиянием].Columns[CompetitionId]"
+                      cachedDataType="i4"
+                      cachedName="CompetitionId"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[CompetitionId]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием]"
+                  name="Выход соединения слиянием">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[ResultTime]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[ResultTime]"
+                      name="ResultTime">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[ResultTime]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[CompetitionId]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[CompetitionId]"
+                      name="CompetitionId">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение c CompetitionId.Inputs[Правый вход соединения слиянием].Columns[CompetitionId]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[SwimmerId]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[SwimmerId]"
+                      name="SwimmerId">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[SwimmerId]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[TypeSwimmingId]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием].Columns[TypeSwimmingId]"
+                      name="TypeSwimmingId">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием].Columns[TypeSwimmingId]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId"
+              componentClassID="Microsoft.MergeJoin"
+              contactInfo="Соединение слиянием;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;1"
+              description="Объедините два отсортированных потока данных в один с помощью соединения FULL, LEFT или INNER. Это преобразование рекомендуется использовать в случаях, когда потоки данных могут быть отсортированы по источникам."
+              name="Соединение SwimmerId и TypeSwimmingId"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает тип выполняемого соединения."
+                  name="JoinType"
+                  typeConverter="JoinType">2</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает количество столбцов в ключе упорядочивания."
+                  name="NumKeyColumns">6</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, считаются ли значения NULL эквивалентными значениями."
+                  name="TreatNullsAsEqual">true</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает запрошенное максимальное число буферов на вход перед блокированием."
+                  name="MaxBuffersPerInput">5</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием]"
+                  hasSideEffects="true"
+                  name="Левый вход соединения слиянием">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[SwimmerPassportNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SwimmerPassportNumber"
+                      cachedSortKeyPosition="1"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[SwimmerPassportNumber]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[TypeSwimmingName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TypeSwimmingName"
+                      cachedSortKeyPosition="2"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[TypeSwimmingName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[CompetitionName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="CompetitionName"
+                      cachedSortKeyPosition="3"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[CompetitionName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[DateStart]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateStart"
+                      cachedSortKeyPosition="4"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[DateStart]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[DateEnd]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateEnd"
+                      cachedSortKeyPosition="5"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[DateEnd]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[ResultTime]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ResultTime"
+                      cachedSortKeyPosition="6"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[ResultTime]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[SwimmerId]"
+                      cachedDataType="i4"
+                      cachedName="SwimmerId"
+                      cachedSortKeyPosition="7"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[SwimmerId]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+                <input
+                  refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Правый вход соединения слиянием]"
+                  hasSideEffects="true"
+                  name="Правый вход соединения слиянием">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Правый вход соединения слиянием].Columns[SwimmerPassportNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SwimmerPassportNumber"
+                      cachedSortKeyPosition="1"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[SwimmerPassportNumber]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Правый вход соединения слиянием].Columns[TypeSwimmingName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TypeSwimmingName"
+                      cachedSortKeyPosition="2"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[TypeSwimmingName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Правый вход соединения слиянием].Columns[CompetitionName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="CompetitionName"
+                      cachedSortKeyPosition="3"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[CompetitionName]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Правый вход соединения слиянием].Columns[DateStart]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateStart"
+                      cachedSortKeyPosition="4"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[DateStart]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Правый вход соединения слиянием].Columns[DateEnd]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateEnd"
+                      cachedSortKeyPosition="5"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[DateEnd]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Правый вход соединения слиянием].Columns[ResultTime]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ResultTime"
+                      cachedSortKeyPosition="6"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[ResultTime]" />
+                    <inputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Правый вход соединения слиянием].Columns[TypeSwimmingId]"
+                      cachedDataType="i4"
+                      cachedName="TypeSwimmingId"
+                      cachedSortKeyPosition="7"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[TypeSwimmingId]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием]"
+                  isSorted="true"
+                  name="Выход соединения слиянием">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[SwimmerPassportNumber]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[SwimmerPassportNumber]"
+                      name="SwimmerPassportNumber"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[SwimmerPassportNumber]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[TypeSwimmingName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[TypeSwimmingName]"
+                      name="TypeSwimmingName"
+                      sortKeyPosition="2">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[TypeSwimmingName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[CompetitionName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[CompetitionName]"
+                      name="CompetitionName"
+                      sortKeyPosition="3">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[CompetitionName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[DateStart]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[DateStart]"
+                      name="DateStart"
+                      sortKeyPosition="4">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[DateStart]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[DateEnd]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[DateEnd]"
+                      name="DateEnd"
+                      sortKeyPosition="5">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[DateEnd]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[ResultTime]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[ResultTime]"
+                      name="ResultTime"
+                      sortKeyPosition="6">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[ResultTime]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[SwimmerId]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[SwimmerId]"
+                      name="SwimmerId">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием].Columns[SwimmerId]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[TypeSwimmingId]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием].Columns[TypeSwimmingId]"
+                      name="TypeSwimmingId">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Входной столбец, связанный с этим выходным столбцом"
+                          name="InputColumnID">#{Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Правый вход соединения слиянием].Columns[TypeSwimmingId]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\Сортировка Competition"
+              componentClassID="Microsoft.Sort"
+              contactInfo="Сортировка;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;1"
+              description="Сортирует входные данные по возрастанию или убыванию, если выполнить сортировку в источнике нельзя. Пример: сортировка данных продаж по полю &quot;customer id&quot; перед записью в неструктурированный файл и передачей в другой отдел. Примечание. Это преобразование не рекомендуется применять к большим потокам данных."
+              name="Сортировка Competition"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, удаляет ли преобразование &quot;Сортировка&quot; строки с повторяющимися значениями сортировки."
+                  name="EliminateDuplicates">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает максимальное число потоков, используемых для сортировки."
+                  expressionType="Notify"
+                  name="MaximumThreads">-1</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Сортировка Competition.Inputs[Вход сортировки]"
+                  name="Вход сортировки">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Inputs[Вход сортировки].Columns[SwimmerPassportNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SwimmerPassportNumber"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[SwimmerPassportNumber]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">1</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Inputs[Вход сортировки].Columns[TypeSwimmingName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TypeSwimmingName"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[TypeSwimmingName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">2</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Inputs[Вход сортировки].Columns[CompetitionName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="CompetitionName"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[CompetitionName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">3</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Inputs[Вход сортировки].Columns[DateStart]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateStart"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateStart]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">4</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Inputs[Вход сортировки].Columns[DateEnd]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateEnd"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateEnd]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">5</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Inputs[Вход сортировки].Columns[ResultTime]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ResultTime"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[ResultTime]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">6</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Inputs[Вход сортировки].Columns[CompetitionId]"
+                      cachedDataType="i4"
+                      cachedName="CompetitionId"
+                      lineageId="Package\Задача потока данных\Competition.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;].Columns[CompetitionId]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">0</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки]"
+                  isSorted="true"
+                  name="Выход сортировки">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[SwimmerPassportNumber]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[SwimmerPassportNumber]"
+                      name="SwimmerPassportNumber"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[SwimmerPassportNumber]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[TypeSwimmingName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[TypeSwimmingName]"
+                      name="TypeSwimmingName"
+                      sortKeyPosition="2">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[TypeSwimmingName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[CompetitionName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[CompetitionName]"
+                      name="CompetitionName"
+                      sortKeyPosition="3">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[CompetitionName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[DateStart]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[DateStart]"
+                      name="DateStart"
+                      sortKeyPosition="4">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[DateStart]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[DateEnd]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[DateEnd]"
+                      name="DateEnd"
+                      sortKeyPosition="5">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[DateEnd]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[ResultTime]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[ResultTime]"
+                      name="ResultTime"
+                      sortKeyPosition="6">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[ResultTime]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[CompetitionId]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки].Columns[CompetitionId]"
+                      name="CompetitionId">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\Competition.Outputs[Вывод совпадений преобразования "Уточняющий запрос"].Columns[CompetitionId]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\Сортировка Swimmer"
+              componentClassID="Microsoft.Sort"
+              contactInfo="Сортировка;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;1"
+              description="Сортирует входные данные по возрастанию или убыванию, если выполнить сортировку в источнике нельзя. Пример: сортировка данных продаж по полю &quot;customer id&quot; перед записью в неструктурированный файл и передачей в другой отдел. Примечание. Это преобразование не рекомендуется применять к большим потокам данных."
+              name="Сортировка Swimmer"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, удаляет ли преобразование &quot;Сортировка&quot; строки с повторяющимися значениями сортировки."
+                  name="EliminateDuplicates">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает максимальное число потоков, используемых для сортировки."
+                  expressionType="Notify"
+                  name="MaximumThreads">-1</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Сортировка Swimmer.Inputs[Вход сортировки]"
+                  name="Вход сортировки">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Inputs[Вход сортировки].Columns[SwimmerPassportNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SwimmerPassportNumber"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[SwimmerPassportNumber]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">1</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Inputs[Вход сортировки].Columns[TypeSwimmingName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TypeSwimmingName"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[TypeSwimmingName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">2</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Inputs[Вход сортировки].Columns[CompetitionName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="CompetitionName"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[CompetitionName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">3</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Inputs[Вход сортировки].Columns[DateStart]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateStart"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateStart]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">4</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Inputs[Вход сортировки].Columns[DateEnd]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateEnd"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateEnd]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">5</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Inputs[Вход сортировки].Columns[ResultTime]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ResultTime"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[ResultTime]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">6</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Inputs[Вход сортировки].Columns[SwimmerId]"
+                      cachedDataType="i4"
+                      cachedName="SwimmerId"
+                      lineageId="Package\Задача потока данных\Swimmer.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;].Columns[SwimmerId]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">7</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки]"
+                  isSorted="true"
+                  name="Выход сортировки">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[SwimmerPassportNumber]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[SwimmerPassportNumber]"
+                      name="SwimmerPassportNumber"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[SwimmerPassportNumber]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[TypeSwimmingName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[TypeSwimmingName]"
+                      name="TypeSwimmingName"
+                      sortKeyPosition="2">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[TypeSwimmingName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[CompetitionName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[CompetitionName]"
+                      name="CompetitionName"
+                      sortKeyPosition="3">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[CompetitionName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[DateStart]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[DateStart]"
+                      name="DateStart"
+                      sortKeyPosition="4">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[DateStart]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[DateEnd]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[DateEnd]"
+                      name="DateEnd"
+                      sortKeyPosition="5">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[DateEnd]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[ResultTime]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[ResultTime]"
+                      name="ResultTime"
+                      sortKeyPosition="6">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[ResultTime]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[SwimmerId]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки].Columns[SwimmerId]"
+                      name="SwimmerId"
+                      sortKeyPosition="7">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\Swimmer.Outputs[Вывод совпадений преобразования "Уточняющий запрос"].Columns[SwimmerId]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Задача потока данных\Сортировка TypeSwimming"
+              componentClassID="Microsoft.Sort"
+              contactInfo="Сортировка;Корпорация Майкрософт. Microsoft SQL Server. (C) Корпорация Майкрософт (Microsoft Corporation). Все права защищены. http://www.microsoft.com/sql/support;1"
+              description="Сортирует входные данные по возрастанию или убыванию, если выполнить сортировку в источнике нельзя. Пример: сортировка данных продаж по полю &quot;customer id&quot; перед записью в неструктурированный файл и передачей в другой отдел. Примечание. Это преобразование не рекомендуется применять к большим потокам данных."
+              name="Сортировка TypeSwimming"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Boolean"
+                  description="Указывает, удаляет ли преобразование &quot;Сортировка&quot; строки с повторяющимися значениями сортировки."
+                  name="EliminateDuplicates">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Указывает максимальное число потоков, используемых для сортировки."
+                  expressionType="Notify"
+                  name="MaximumThreads">-1</property>
+              </properties>
+              <inputs>
+                <input
+                  refId="Package\Задача потока данных\Сортировка TypeSwimming.Inputs[Вход сортировки]"
+                  name="Вход сортировки">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Inputs[Вход сортировки].Columns[SwimmerPassportNumber]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="SwimmerPassportNumber"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[SwimmerPassportNumber]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">1</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Inputs[Вход сортировки].Columns[TypeSwimmingName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="TypeSwimmingName"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[TypeSwimmingName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">2</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Inputs[Вход сортировки].Columns[CompetitionName]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="CompetitionName"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[CompetitionName]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">3</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Inputs[Вход сортировки].Columns[DateStart]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateStart"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateStart]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">4</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Inputs[Вход сортировки].Columns[DateEnd]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="DateEnd"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[DateEnd]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">5</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Inputs[Вход сортировки].Columns[ResultTime]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="ResultTime"
+                      lineageId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;].Columns[ResultTime]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">6</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Inputs[Вход сортировки].Columns[TypeSwimmingId]"
+                      cachedDataType="i4"
+                      cachedName="TypeSwimmingId"
+                      lineageId="Package\Задача потока данных\TypeSwimming.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;].Columns[TypeSwimmingId]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Задает параметры сравнения символьных данных."
+                          name="NewComparisonFlags">0</property>
+                        <property
+                          dataType="System.Int32"
+                          description="Указывает порядок сортировки столбца."
+                          name="NewSortKeyPosition">7</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки]"
+                  isSorted="true"
+                  name="Выход сортировки">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[SwimmerPassportNumber]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[SwimmerPassportNumber]"
+                      name="SwimmerPassportNumber"
+                      sortKeyPosition="1">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[SwimmerPassportNumber]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[TypeSwimmingName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[TypeSwimmingName]"
+                      name="TypeSwimmingName"
+                      sortKeyPosition="2">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[TypeSwimmingName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[CompetitionName]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[CompetitionName]"
+                      name="CompetitionName"
+                      sortKeyPosition="3">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[CompetitionName]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[DateStart]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[DateStart]"
+                      name="DateStart"
+                      sortKeyPosition="4">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[DateStart]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[DateEnd]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[DateEnd]"
+                      name="DateEnd"
+                      sortKeyPosition="5">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[DateEnd]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[ResultTime]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[ResultTime]"
+                      name="ResultTime"
+                      sortKeyPosition="6">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника "Excel"].Columns[ResultTime]}</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[TypeSwimmingId]"
+                      dataType="i4"
+                      lineageId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки].Columns[TypeSwimmingId]"
+                      name="TypeSwimmingId"
+                      sortKeyPosition="7">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Указывает идентификатор журнала обращений и преобразований входного столбца, связанного с этим выходным столбцом."
+                          name="SortColumnId">#{Package\Задача потока данных\TypeSwimming.Outputs[Вывод совпадений преобразования "Уточняющий запрос"].Columns[TypeSwimmingId]}</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Задача потока данных.Paths[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;]"
+              endId="Package\Задача потока данных\Сортировка Swimmer.Inputs[Вход сортировки]"
+              name="Вывод совпадений преобразования &quot;Уточняющий запрос&quot;"
+              startId="Package\Задача потока данных\Swimmer.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;1]"
+              endId="Package\Задача потока данных\Сортировка TypeSwimming.Inputs[Вход сортировки]"
+              name="Вывод совпадений преобразования &quot;Уточняющий запрос&quot;"
+              startId="Package\Задача потока данных\TypeSwimming.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;2]"
+              endId="Package\Задача потока данных\Сортировка Competition.Inputs[Вход сортировки]"
+              name="Вывод совпадений преобразования &quot;Уточняющий запрос&quot;"
+              startId="Package\Задача потока данных\Competition.Outputs[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Выход источника &quot;Excel&quot;]"
+              endId="Package\Задача потока данных\Распределение данных.Inputs[Многоадресная рассылка Вход 1]"
+              name="Выход источника &quot;Excel&quot;"
+              startId="Package\Задача потока данных\SSIS FK for Swimmer.Outputs[Выход источника &quot;Excel&quot;]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Выход многоадресной рассылки 1]"
+              endId="Package\Задача потока данных\Swimmer.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]"
+              name="Выход многоадресной рассылки 1"
+              startId="Package\Задача потока данных\Распределение данных.Outputs[Выход многоадресной рассылки 1]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Выход многоадресной рассылки 2]"
+              endId="Package\Задача потока данных\Competition.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]"
+              name="Выход многоадресной рассылки 2"
+              startId="Package\Задача потока данных\Распределение данных.Outputs[Выход многоадресной рассылки 2]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Выход соединения слиянием]"
+              endId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Левый вход соединения слиянием]"
+              name="Выход соединения слиянием"
+              startId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Outputs[Выход соединения слиянием]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Выход соединения слиянием1]"
+              endId="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;.Inputs[Вход назначения &quot;OLE DB&quot;]"
+              name="Выход соединения слиянием"
+              startId="Package\Задача потока данных\Соединение c CompetitionId.Outputs[Выход соединения слиянием]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Выход сортировки]"
+              endId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Правый вход соединения слиянием]"
+              name="Выход сортировки"
+              startId="Package\Задача потока данных\Сортировка TypeSwimming.Outputs[Выход сортировки]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Выход сортировки1]"
+              endId="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId.Inputs[Левый вход соединения слиянием]"
+              name="Выход сортировки"
+              startId="Package\Задача потока данных\Сортировка Swimmer.Outputs[Выход сортировки]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Выход сортировки2]"
+              endId="Package\Задача потока данных\Соединение c CompetitionId.Inputs[Правый вход соединения слиянием]"
+              name="Выход сортировки"
+              startId="Package\Задача потока данных\Сортировка Competition.Outputs[Выход сортировки]" />
+            <path
+              refId="Package\Задача потока данных.Paths[Многоадресная рассылка Выход 1]"
+              endId="Package\Задача потока данных\TypeSwimming.Inputs[Ввод преобразования &quot;Уточняющий запрос&quot;]"
+              name="Многоадресная рассылка Выход 1"
+              startId="Package\Задача потока данных\Распределение данных.Outputs[Многоадресная рассылка Выход 1]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        <NodeLayout
+          Size="196,42"
+          Id="Package\Задача потока данных"
+          TopLeft="149,76" />
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Задача потока данных">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="154,42"
+          Id="Package\Задача потока данных\TypeSwimming"
+          TopLeft="514,164" />
+        <NodeLayout
+          Size="201,42"
+          Id="Package\Задача потока данных\Распределение данных"
+          TopLeft="454,76" />
+        <NodeLayout
+          Size="189,42"
+          Id="Package\Задача потока данных\Сортировка Swimmer"
+          TopLeft="117,243" />
+        <NodeLayout
+          Size="186,42"
+          Id="Package\Задача потока данных\SSIS FK for Swimmer"
+          TopLeft="457.333333333333,9" />
+        <NodeLayout
+          Size="125,42"
+          Id="Package\Задача потока данных\Swimmer"
+          TopLeft="286,164" />
+        <NodeLayout
+          Size="341,42"
+          Id="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;"
+          TopLeft="393,468" />
+        <NodeLayout
+          Size="202,42"
+          Id="Package\Задача потока данных\Сортировка Competition"
+          TopLeft="836,250" />
+        <NodeLayout
+          Size="222,42"
+          Id="Package\Задача потока данных\Соединение c CompetitionId"
+          TopLeft="765,344" />
+        <NodeLayout
+          Size="138,42"
+          Id="Package\Задача потока данных\Competition"
+          TopLeft="774,166" />
+        <NodeLayout
+          Size="297,42"
+          Id="Package\Задача потока данных\Соединение SwimmerId и TypeSwimmingId"
+          TopLeft="315,349" />
+        <NodeLayout
+          Size="218,42"
+          Id="Package\Задача потока данных\Сортировка TypeSwimming"
+          TopLeft="494,243" />
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Выход источника &quot;Excel&quot;]"
+          TopLeft="552.416666666667,51">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,25"
+              Start="0,0"
+              End="0,17.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,17.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;2]"
+          TopLeft="843,208">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="94,42"
+              Start="0,0"
+              End="94,34.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,17" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,17"
+                    Point2="0,21"
+                    Point3="4,21" />
+                  <mssgle:LineSegment
+                    End="90,21" />
+                  <mssgle:CubicBezierSegment
+                    Point1="90,21"
+                    Point2="94,21"
+                    Point3="94,25" />
+                  <mssgle:LineSegment
+                    End="94,34.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-87.68986328125,26,269.3797265625,12"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;1]"
+          TopLeft="591,206">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="12,37"
+              Start="0,0"
+              End="12,29.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,14.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,14.5"
+                    Point2="0,18.5"
+                    Point3="4,18.5" />
+                  <mssgle:LineSegment
+                    End="8,18.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="8,18.5"
+                    Point2="12,18.5"
+                    Point3="12,22.5" />
+                  <mssgle:LineSegment
+                    End="12,29.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-128.68986328125,23.5,269.3797265625,12"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Вывод совпадений преобразования &quot;Уточняющий запрос&quot;]"
+          TopLeft="348.5,206">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-137,37"
+              Start="0,0"
+              End="-137,29.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,14.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,14.5"
+                    Point2="0,18.5"
+                    Point3="-4,18.5" />
+                  <mssgle:LineSegment
+                    End="-133,18.5" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-133,18.5"
+                    Point2="-137,18.5"
+                    Point3="-137,22.5" />
+                  <mssgle:LineSegment
+                    End="-137,29.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-203.18986328125,23.5,269.3797265625,12"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Многоадресная рассылка Выход 1]"
+          TopLeft="554.5,118">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="36.5,46"
+              Start="0,0"
+              End="36.5,38.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,19" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,19"
+                    Point2="0,23"
+                    Point3="4,23" />
+                  <mssgle:LineSegment
+                    End="32.5,23" />
+                  <mssgle:CubicBezierSegment
+                    Point1="32.5,23"
+                    Point2="36.5,23"
+                    Point3="36.5,27" />
+                  <mssgle:LineSegment
+                    End="36.5,38.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Выход сортировки2]"
+          TopLeft="937,292">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-61,52"
+              Start="0,0"
+              End="-61,44.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,22" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,22"
+                    Point2="0,26"
+                    Point3="-4,26" />
+                  <mssgle:LineSegment
+                    End="-57,26" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-57,26"
+                    Point2="-61,26"
+                    Point3="-61,30" />
+                  <mssgle:LineSegment
+                    End="-61,44.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Выход сортировки1]"
+          TopLeft="211.5,285">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="203.833333333333,64"
+              Start="0,0"
+              End="203.833333333333,56.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,34.1942397856664" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,34.1942397856664"
+                    Point2="0,38.1942397856664"
+                    Point3="4,38.1942397856664" />
+                  <mssgle:LineSegment
+                    End="199.833333333333,38.1942397856664" />
+                  <mssgle:CubicBezierSegment
+                    Point1="199.833333333333,38.1942397856664"
+                    Point2="203.833333333333,38.1942397856664"
+                    Point3="203.833333333333,42.1942397856664" />
+                  <mssgle:LineSegment
+                    End="203.833333333333,56.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Выход сортировки]"
+          TopLeft="603,285">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-91.3333333333334,64"
+              Start="0,0"
+              End="-91.3333333333334,56.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,34.1942397856664" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,34.1942397856664"
+                    Point2="0,38.1942397856664"
+                    Point3="-4,38.1942397856664" />
+                  <mssgle:LineSegment
+                    End="-87.3333333333334,38.1942397856664" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-87.3333333333334,38.1942397856664"
+                    Point2="-91.3333333333334,38.1942397856664"
+                    Point3="-91.3333333333334,42.1942397856664" />
+                  <mssgle:LineSegment
+                    End="-91.3333333333334,56.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Выход соединения слиянием1]"
+          TopLeft="876,386">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-312.5,82"
+              Start="0,0"
+              End="-312.5,74.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,37" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,37"
+                    Point2="0,41"
+                    Point3="-4,41" />
+                  <mssgle:LineSegment
+                    End="-308.5,41" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-308.5,41"
+                    Point2="-312.5,41"
+                    Point3="-312.5,45" />
+                  <mssgle:LineSegment
+                    End="-312.5,74.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Выход соединения слиянием]"
+          TopLeft="612,367.5">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="153,0"
+              Start="0,0"
+              End="145.5,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="145.5,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Выход многоадресной рассылки 2]"
+          TopLeft="602.75,118">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="240.25,48"
+              Start="0,0"
+              End="240.25,40.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,12.4189852700491" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,12.4189852700491"
+                    Point2="0,16.4189852700491"
+                    Point3="4,16.4189852700491" />
+                  <mssgle:LineSegment
+                    End="236.25,16.4189852700491" />
+                  <mssgle:CubicBezierSegment
+                    Point1="236.25,16.4189852700491"
+                    Point2="240.25,16.4189852700491"
+                    Point3="240.25,20.4189852700491" />
+                  <mssgle:LineSegment
+                    End="240.25,40.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Задача потока данных.Paths[Выход многоадресной рассылки 1]"
+          TopLeft="506.25,118">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-157.75,46"
+              Start="0,0"
+              End="-157.75,38.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,11.7348608837971" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,11.7348608837971"
+                    Point2="0,15.7348608837971"
+                    Point3="-4,15.7348608837971" />
+                  <mssgle:LineSegment
+                    End="-153.75,15.7348608837971" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-153.75,15.7348608837971"
+                    Point2="-157.75,15.7348608837971"
+                    Point3="-157.75,19.7348608837971" />
+                  <mssgle:LineSegment
+                    End="-157.75,38.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Задача потока данных\SSIS FK for Swimmer">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Задача потока данных\Назначение &quot;OLE DB Swimming_Swimmer_Results&quot;">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Задача потока данных\Competition">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:boolean">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string"></Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:int">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
