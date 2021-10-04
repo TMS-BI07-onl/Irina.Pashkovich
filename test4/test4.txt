@@ -1,0 +1,57 @@
+/****** Script for SelectTopNRows command from SSMS  ******/
+--1
+SELECT [ProductID], [Weight]
+FROM [AdventureWorks2017].[Production].[Product]
+GROUP BY [ProductID], [Weight]
+HAVING MIN([Weight]) > 150
+
+--2  задание
+--1 способ
+SELECT [Name], [StandardCost]
+FROM
+(
+SELECT [Name], [StandardCost], MAX([StandardCost]) OVER () as MaxPrice
+FROM [AdventureWorks2017].[Production].[Product]) Price
+WHERE [StandardCost] = MaxPrice
+
+--2 способ
+SELECT TOP 1 WITH TIES [Name], [StandardCost]
+FROM [AdventureWorks2017].[Production].[Product]
+ORDER BY [StandardCost] DESC
+
+--3 способ
+SELECT [Name], [StandardCost]
+FROM
+(
+SELECT [Name], [StandardCost], RANK() OVER (ORDER BY [StandardCost] DESC) as [rank]
+FROM [AdventureWorks2017].[Production].[Product]) Price
+WHERE [rank] = 1
+
+--4 способ
+SELECT [Name], [StandardCost]
+FROM [AdventureWorks2017].[Production].[Product]
+WHERE [StandardCost] = (SELECT MAX([StandardCost]) FROM [Production].[Product])
+
+--3 Задание
+SELECT [CompId]
+FROM [Competitions] Competitions
+LEFT JOIN [dbo].[SwimPools] Pools ON Competitions.[PoolID]=Pools.PoolID
+WHERE Pools.PoolID.[PoolID] IS NULL
+
+--4 Задание
+SELECT JudgeID, COUNT (CompID)
+FROM bridge_swim_judge bridge
+JOIN Competitions Competitions ON bridge.CompID=Competitions.CompID
+WHERE YEAR([Data]) BETWEEN YEAR(GETDATE())-15 AND YEAR(GETDATE())
+GROUP BY JudgeID
+
+--5 задание
+
+SELECT category
+FROM(
+SELECT email, category, COUNT(is_read) OVER (Partition by email, category) as kol
+FROM Notifications Notifications
+JOIN Users Users ON Notifications.user_id = Users.id
+WHERE is_read = 'false'
+)
+WHERE email =  'alex@gmail.com'  AND kol >50
