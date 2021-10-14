@@ -1,0 +1,15 @@
+Well done!
+
+1. -0.5
+Count formula is incorrect. Why you are calculating over emp.emp_id? Also all can be done in one query.
+Recursion CTE is totally not the best option here.
+
+3.
+Can be done in the one query.
+
+4.
+The idea was to calculate difference between avgs.
+Why grouping by salary?
+
+
+Mark: 10.
